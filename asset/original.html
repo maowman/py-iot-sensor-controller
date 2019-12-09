@@ -1,0 +1,117 @@
+<!DOCTYPE html>
+<!-- saved from url=(0019)http://192.168.4.1/ -->
+<html>
+    <head><meta content="text/html; charset=UTF-8" http-equiv="Content-Type">
+        <title>睿揚創新科技有限公司</title>
+
+        <script type="text/javascript">
+            var ajax = null;
+            var count = 2;
+            var result = [];
+            if (window.XMLHttpRequest) {
+                ajax = new XMLHttpRequest();
+            } else {
+                ajax = new ActiveXObject("Microsoft.XMLHTTP");
+            }
+            function ajaxLoad(method, URL, displayElementId, sendData) {
+                if (! ajax) {
+                    alert("not support");
+                    return;
+                }
+                ajax.open(method, URL, true);
+                ajax.onreadystatechange = function () {
+                    if (ajax.readyState == 4 && ajax.status == 200) {
+                        var ajax_result = ajax.responseText;
+                        var el = document.getElementById(displayElementId);
+                        el.innerHTML = ajax_result;
+                    }
+                }
+                ajax.send(sendData);
+            }
+            function sendDac(Pin, value) {
+                ValNum = "rgb" + Pin;
+                document.getElementById(ValNum).innerHTML = value;
+                server = "color" + Pin + "=" + value;
+                ajax.open("GET", server, true);
+                ajax.send(null);
+            }
+            function update_value() {
+                var URL = "/value_.html";
+                ajaxLoad("GET", URL, 'value_put', null);
+            }
+        </script>
+    </head>
+    <body>
+        <font face="Arial">
+            <p align="center">
+                <id='brightness_page'>
+                    <strong style="font-size:80px;color:blue">睿揚創新進階班</strong><br>
+                </id='brightness_page'>
+            </p>
+            <table align="center" border="1" cellpadding="6" name="Table" width="600">
+                <tbody>
+                    <tr>
+                        <th align="center" colspan="6" style="font-size:30px;color:red">接收資料</th>
+                    </tr>
+                    <tr id="value_put">
+                        <td align="center">
+                            <font style="font-size:30px">溫度<br><font>23</font>°C</font>
+                        </td>
+                        <td align="center">
+                            <font style="font-size:30px">濕度<br>
+                                <font>78</font>%</font>
+                        </td>
+                        <td align="center" width="200">
+                            <font style="font-size:30px">距離<br>
+                                <font>9.71</font>cm</font>
+                        </td>
+                    </tr>
+                    <tr>
+                        <th align="center" colspan="6" style="font-size:30px;color:green">開關控制</th>
+                    </tr>
+                    <tr>
+                        <td align="center">
+                            <button onclick="Relay(&#39;r1on&#39;)" style="height:50px;width:100px;font-weight:bold;background-color:green;font-size:20px">電源ON</button><br>
+                            <button onclick="Relay(&#39;r1off&#39;)" style="height:50px;width:100px;font-weight:bold;background-color:red;font-size:20px">電源OFF</button>
+                        </td>
+                        <td align="center">
+                            <button onclick="Relay(&#39;r2on&#39;)" style="height:50px;width:100px;font-weight:bold;background-color:green;font-size:20px">蜂鳴器ON</button><br>
+                            <button onclick="Relay(&#39;r2off&#39;)" style="height:50px;width:100px;font-weight:bold;background-color:red;font-size:20px">蜂鳴器OFF</button>
+                        </td>
+                    </tr>
+                    <tr>
+                        <th align="center" colspan="6" style="font-size:30px">
+                            <font style="color:red">R</font>
+                            <font style="color:green">G</font>
+                            <font style="color:blue">B</font>
+                            Output</th>
+                    </tr>
+                    <tr>
+                        <td align="center" colspan="6">
+                            <font style="color:red">紅:<span id="rgb1">0</span>
+                            </font><br>
+                            R<input id="rgb_R" max="255" min="0" onchange="sendDac(1,this.value);" step="1" style="width: 255px; height: 30px;" type="range" value="0"><br>
+                            <font style="color:green">綠:<span id="rgb2">0</span>
+                            </font><br>
+                            G<input id="rgb_G" max="255" min="0" onchange="sendDac(2,this.value);" step="1" style="width: 255px; height: 30px;" type="range" value="0"><br>
+                            <font style="color:blue">藍:<span id="rgb3">0</span>
+                            </font><br>
+                            B<input id="rgb_G" max="255" min="0" onchange="sendDac(3,this.value);" step="1" style="width: 255px; height: 30px;" type="range" value="0">
+                        </td>
+                    </tr>
+                    <script>
+                        function Relay(state) {
+                            ajaxLoad("GET", state + '.html', null, null);
+                        }
+                        setInterval("update_value();", 2000);
+                    </script>
+                    <!--
+                    註解放置
+                    -->
+                </tbody>
+            </table>
+
+
+        </font>
+    </body>
+</html>
